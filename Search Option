@@ -1,0 +1,61 @@
+ <div class="col-lg-3 col-sm-4 col-12">
+     <div class="mb-2">
+         <label for="VendorId" class="form-label fw-bold">Customer Name</label>
+         <div class="d-flex align-items-center">
+             <!-- Dropdown -->
+             <select asp-for="VendorId" id="VendorId" class="form-control select2" asp-items="@ViewBag.Vendors">
+                 <option value="" selected disabled>SELECT</option>
+             </select>
+             <div data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Add Vendor">
+                 <button id="openVendorForm" class="btn btn-sm btn-danger text-white ms-2" data-bs-toggle="modal" data-bs-target="#updateModal">
+                     <i class="bi bi-plus"></i>
+                 </button>
+             </div>
+
+         </div>
+     </div>
+ </div>
+
+> in this dropdown css class has added select2 this have to add where u want search bar in dropdown. 
+
+ <script>
+     $(document).ready(function () {
+         // Check if Select2 is missing and force-load it
+         if (typeof $.fn.select2 === 'undefined') {
+             console.warn('Select2 is not loaded! Trying to load it now...');
+             $.getScript("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js", function() {
+                 console.log("✅ Select2 Loaded Successfully!");
+
+                 // Initialize Select2 after loading
+                 $('#VendorId').select2({
+                     placeholder: "Search Vendor...",
+                     allowClear: true,
+                     width: "100%"
+                 });
+             });
+         } else {
+             console.log("✅ Select2 is already loaded!");
+
+             // Initialize Select2
+             $('#VendorId').select2({
+                 placeholder: "Search Vendor...",
+                 allowClear: true,
+                 width: "100%"
+             });
+         }
+     });
+ </script>
+
+> Add this js in same view where is your dropdown will populate below in section.
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+> add this link in head in layout where is your view is merge.
+
+ <!-- Load jQuery first -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+ <!-- Load Select2 -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+> then add this code on top of all js and jquery link in body of your layout.
