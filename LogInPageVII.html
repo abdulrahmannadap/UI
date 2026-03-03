@@ -1,0 +1,243 @@
+@model LoginVM
+@{
+    ViewData["Title"] = Model.IsChangePassword ? "Secure Access" : "System Login";
+}
+
+<style>
+    /* Full-bleed split: No cards, just background partitions */
+    .bs-split-wrapper {
+        display: flex;
+        min-height: calc(100vh - 100px); /* Adjust based on your Layout header height */
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Left Side: The "Deep" Brand Wall */
+    .bs-wall-left {
+        flex: 1;
+        background-color: #0f172a; /* Professional Slate/Navy */
+        background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(30, 41, 59, 1) 0px, transparent 50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10%;
+        color: #ffffff;
+    }
+
+    .bs-wall-brand {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: -3px;
+        line-height: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .bs-wall-desc {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        max-width: 450px;
+        line-height: 1.6;
+        border-left: 3px solid #38bdf8;
+        padding-left: 25px;
+    }
+
+    /* Right Side: The "Clean" Interactive Wall */
+    .bs-wall-right {
+        flex: 1;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10%;
+    }
+
+    .bs-form-container {
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .bs-header-text {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 10px;
+    }
+
+    /* High-contrast, Borderless-style inputs */
+    .bs-form-group {
+        margin-bottom: 2rem;
+    }
+
+    .bs-label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .bs-field {
+        border: none;
+        border-bottom: 2px solid #e2e8f0;
+        border-radius: 0;
+        padding: 15px 0;
+        font-size: 1.15rem;
+        width: 100%;
+        background: transparent;
+        transition: all 0.3s ease;
+        color: #1e293b;
+    }
+
+        .bs-field:focus {
+            outline: none;
+            border-bottom-color: #0f172a;
+            box-shadow: none;
+        }
+
+    /* Massive Action Button */
+    .bs-primary-btn {
+        background: #0f172a;
+        color: #ffffff;
+        border: none;
+        padding: 20px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        width: 100%;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .bs-primary-btn:hover {
+            background: #334155;
+        }
+
+    .bs-footer-info {
+        margin-top: 50px;
+        font-size: 0.9rem;
+        color: #94a3b8;
+    }
+
+    .bs-accent-text {
+        color: #38bdf8;
+    }
+
+    @@media (max-width: 992px) {
+        .bs-wall-left {
+            display: none;
+        }
+
+        .bs-wall-right {
+            padding: 40px;
+        }
+    }
+</style>
+
+<div class="container-fluid p-0 m-0">
+    <div class="bs-split-wrapper">
+
+        @* --- LEFT PARTITION (THE BRAND) --- *@
+        <div class="bs-wall-left">
+            <h1 class="bs-wall-brand">BillSync<span class="bs-accent-text">.</span></h1>
+            <p class="bs-wall-desc">
+                Precision Inventory, GST-Compliant Accounting, and Secure Ledger Management for modern enterprises.
+            </p>
+
+            <div class="mt-5 d-flex gap-4">
+                <div class="small">
+                    <strong class="d-block text-white">3.6 Years</strong>
+                    <span class="text-white-50">Proven Stability</span>
+                </div>
+                <div class="small">
+                    <strong class="d-block text-white">100% Secure</strong>
+                    <span class="text-white-50">Transaction Safe</span>
+                </div>
+            </div>
+        </div>
+
+        @* --- RIGHT PARTITION (THE UTILITY) --- *@
+        <div class="bs-wall-right">
+            <div class="bs-form-container">
+
+                <div class="mb-5">
+                    <h2 class="bs-header-text">
+                        @(Model.IsChangePassword ? "Change Password" : "Authenticate")
+                    </h2>
+                    <p class="text-muted">Enter your system credentials below.</p>
+                </div>
+
+                @if (!Model.IsChangePassword)
+                {
+                    <form asp-action="Login" method="post">
+                        <div class="bs-form-group">
+                            <label asp-for="UserName" class="bs-label">User Identity</label>
+                            <input asp-for="UserName" class="bs-field" placeholder="Username" />
+                            <span asp-validation-for="UserName" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="bs-form-group">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label asp-for="Password" class="bs-label">Security Key</label>
+                                <a asp-action="Login" asp-route-isChangePassword="true" class="text-decoration-none small fw-bold text-primary">Forgot?</a>
+                            </div>
+                            <input asp-for="Password" type="password" class="bs-field" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <div class="form-check mb-5">
+                            <input asp-for="RememberMe" class="form-check-input" id="authRem">
+                            <label class="form-check-label text-muted fw-semibold" for="authRem">
+                                Keep session active
+                            </label>
+                        </div>
+
+                        <button type="submit" class="bs-primary-btn">Sign In to BillSync</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="ChangePassword" method="post">
+                        <input type="hidden" asp-for="IsChangePassword" value="true" />
+
+                        <div class="bs-form-group">
+                            <label asp-for="ChangeEmail" class="bs-label">Registered Email</label>
+                            <input asp-for="ChangeEmail" class="bs-field" />
+                        </div>
+
+                        <div class="bs-form-group">
+                            <label asp-for="NewPassword" class="bs-label">New Password</label>
+                            <input asp-for="NewPassword" type="password" class="bs-field" />
+                        </div>
+
+                        <div class="bs-form-group">
+                            <label asp-for="ConfirmNewPassword" class="bs-label">Confirm New Password</label>
+                            <input asp-for="ConfirmNewPassword" type="password" class="bs-field" />
+                        </div>
+
+                        <button type="submit" class="bs-primary-btn" style="background:#059669;">Update Identity</button>
+
+                        <div class="text-center mt-4">
+                            <a asp-action="Login" class="text-muted text-decoration-none small fw-bold">&larr; BACK TO LOGIN</a>
+                        </div>
+                    </form>
+                }
+
+                <div class="bs-footer-info">
+                    &copy; @DateTime.Now.Year - TrustEdge Solution LLP. All rights reserved.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
