@@ -1,0 +1,234 @@
+@model LoginVM
+@{
+    ViewData["Title"] = Model.IsChangePassword ? "Security" : "Login";
+}
+
+<style>
+    /* BillSync Executive Minimalist Theme */
+    .bs-auth-surface {
+        background-color: #ffffff;
+        border: 1px solid #edf2f7;
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.03), 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+        max-width: 480px;
+        margin: 40px auto;
+        transition: all 0.3s ease;
+    }
+
+    .bs-logo-area {
+        margin-bottom: 2.5rem;
+        text-align: center;
+    }
+
+    .bs-brand-name {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #1a202c;
+        letter-spacing: -1.5px;
+        margin-bottom: 0;
+    }
+
+    .bs-subtitle {
+        color: #718096;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .bs-label {
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .bs-input {
+        background-color: #f7fafc;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        padding: 0.9rem 1.1rem;
+        font-size: 1rem;
+        color: #2d3748;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+        .bs-input:focus {
+            background-color: #ffffff;
+            border-color: #3182ce;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            outline: none;
+        }
+
+    .bs-btn {
+        background: #1a202c;
+        color: #ffffff;
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        width: 100%;
+        margin-top: 1.5rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+        .bs-btn:hover {
+            background: #2d3748;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+    .bs-btn-success {
+        background: #38a169;
+    }
+
+        .bs-btn-success:hover {
+            background: #2f855a;
+        }
+
+    .bs-link {
+        color: #3182ce;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+        .bs-link:hover {
+            text-decoration: underline;
+        }
+
+    .bs-footer-text {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: #a0aec0;
+        font-weight: 500;
+    }
+
+    /* Soft pulse for the "Live" indicator */
+    .status-dot {
+        height: 8px;
+        width: 8px;
+        background-color: #48bb78;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+        box-shadow: 0 0 0 rgba(72, 187, 120, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+        }
+    }
+</style>
+
+<div class="container py-5">
+    <div class="bs-auth-surface">
+
+        @* --- BRANDING --- *@
+        <div class="bs-logo-area">
+            <h1 class="bs-brand-name">BillSync</h1>
+            <div class="d-flex align-items-center justify-content-center">
+                <span class="status-dot"></span>
+                <span class="bs-subtitle">Accounting Core</span>
+            </div>
+        </div>
+
+        @if (!Model.IsChangePassword)
+        {
+            @* --- LOGIN FORM --- *@
+            <form asp-action="Login" method="post">
+                <div class="mb-4">
+                    <label asp-for="UserName" class="bs-label">USER IDENTITY</label>
+                    <input asp-for="UserName" class="bs-input" placeholder="e.g. admin_01" />
+                    <span asp-validation-for="UserName" class="text-danger x-small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <label asp-for="Password" class="bs-label">SECURITY KEY</label>
+                        <a asp-action="Login" asp-route-isChangePassword="true" class="bs-link">Forgot?</a>
+                    </div>
+                    <input asp-for="Password" type="password" class="bs-input" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-danger x-small mt-1 d-block"></span>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input asp-for="RememberMe" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label text-muted small fw-bold" for="rememberMe" style="cursor:pointer">
+                        Keep session active
+                    </label>
+                </div>
+
+                <button type="submit" class="bs-btn">Enter System</button>
+            </form>
+        }
+        else
+        {
+            @* --- CHANGE PASSWORD FORM --- *@
+            <div class="mb-4 text-center">
+                <h4 class="fw-bold">Credential Update</h4>
+                <p class="text-muted small">Update your security keys for <strong>BillSync</strong></p>
+            </div>
+
+            <form asp-action="ChangePassword" method="post">
+                <input type="hidden" asp-for="IsChangePassword" value="true" />
+
+                <div class="mb-3">
+                    <label asp-for="ChangeEmail" class="bs-label">REGISTERED EMAIL</label>
+                    <input asp-for="ChangeEmail" class="bs-input" />
+                    <span asp-validation-for="ChangeEmail" class="text-danger x-small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NewPassword" class="bs-label">NEW SECURITY KEY</label>
+                    <input asp-for="NewPassword" type="password" class="bs-input" />
+                    <span asp-validation-for="NewPassword" class="text-danger x-small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ConfirmNewPassword" class="bs-label">CONFIRM KEY</label>
+                    <input asp-for="ConfirmNewPassword" type="password" class="bs-input" />
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger x-small mt-1 d-block"></span>
+                </div>
+
+                <button type="submit" class="bs-btn bs-btn-success">Update Credentials</button>
+
+                <div class="text-center mt-4">
+                    <a asp-action="Login" class="text-muted text-decoration-none small fw-bold">
+                        &larr; BACK TO LOGIN
+                    </a>
+                </div>
+            </form>
+        }
+
+        @* --- FOOTER --- *@
+        <div class="bs-footer-text">
+            &copy; @DateTime.Now.Year - TrustEdge Solution LLP
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
