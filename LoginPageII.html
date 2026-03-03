@@ -1,0 +1,234 @@
+@model LoginVM
+@{
+    ViewData["Title"] = Model.IsChangePassword ? "Change Password" : "Secure Login";
+}
+
+<style>
+    /* BillSync Premium Auth UI */
+    :root {
+        --bs-primary-dark: #0f172a;
+        --bs-accent: #3b82f6;
+    }
+
+    .bs-auth-wrapper {
+        display: flex;
+        min-height: calc(100vh - 120px); /* Adjust based on your layout header/footer height */
+        border-radius: 20px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Left Side: Modern Brand Area */
+    .bs-side-panel {
+        background: var(--bs-primary-dark);
+        background-image: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+        color: #fff;
+        padding: 60px;
+        position: relative;
+        width: 45%;
+    }
+
+    .bs-logo-text {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        background: linear-gradient(to right, #fff, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .bs-side-content {
+        margin-top: 100px;
+    }
+
+    .bs-stat-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Right Side: Form Area */
+    .bs-form-panel {
+        flex: 1;
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .bs-input-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .bs-input-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .bs-form-control {
+        border: 2px solid #f1f5f9;
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background: #f8fafc;
+        width: 100%;
+    }
+
+    .bs-form-control:focus {
+        border-color: var(--bs-accent);
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .bs-btn-primary {
+        background: var(--bs-accent);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 10px;
+        transition: transform 0.2s, background 0.2s;
+        box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+    }
+
+    .bs-btn-primary:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    .bs-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    @@media (max-width: 992px) {
+        .bs-side-panel { display: none; }
+        .bs-auth-wrapper { box-shadow: none; border: none; }
+        .bs-form-panel { padding: 20px; }
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+    <div class="bs-auth-wrapper">
+        
+        @* --- SIDEBAR PANEL --- *@
+        <div class="bs-side-panel d-flex flex-column justify-content-between">
+            <div>
+                <div class="bs-logo-text">BillSync.</div>
+                <div class="bs-side-content">
+                    <h2 class="fw-bold text-white mb-4" style="line-height: 1.2;">Manage your inventory with precision.</h2>
+                    
+                    <div class="bs-stat-pill">
+                        <small class="text-info d-block mb-1 fw-bold">GST COMPLIANCE</small>
+                        <p class="mb-0 small opacity-75">Automated tax calculations and HSN tracking built-in.</p>
+                    </div>
+
+                    <div class="bs-stat-pill">
+                        <small class="text-warning d-block mb-1 fw-bold">STOCK CONTROL</small>
+                        <p class="mb-0 small opacity-75">Batch tracking and expiry alerts for your warehouse.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opacity-50 small">
+                Professional Accounting Suite v2.0
+            </div>
+        </div>
+
+        @* --- FORM PANEL --- *@
+        <div class="bs-form-panel">
+            <div style="max-width: 400px; margin: 0 auto; width: 100%;">
+                <div class="mb-5">
+                    <h3 class="fw-bold text-dark mb-2">
+                        @(Model.IsChangePassword ? "Change Password" : "Login to System")
+                    </h3>
+                    <p class="text-muted">Security and reliability for your business.</p>
+                </div>
+
+                @if (!Model.IsChangePassword)
+                {
+                    <form asp-action="Login" method="post">
+                        <div class="bs-input-group">
+                            <label asp-for="UserName" class="bs-input-label">Identity</label>
+                            <input asp-for="UserName" class="bs-form-control" placeholder="Enter username" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="bs-input-group">
+                            <div class="d-flex justify-content-between">
+                                <label asp-for="Password" class="bs-input-label">Secret Key</label>
+                                <a asp-action="Login" asp-route-isChangePassword="true" class="small text-decoration-none fw-bold" style="color:var(--bs-accent)">Reset?</a>
+                            </div>
+                            <input asp-for="Password" type="password" class="bs-form-control" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input asp-for="RememberMe" class="form-check-input" id="rm">
+                            <label class="form-check-label text-muted small" for="rm">Stay authenticated on this device</label>
+                        </div>
+
+                        <button type="submit" class="bs-btn-primary">Authenticate</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="ChangePassword" method="post">
+                        <input type="hidden" asp-for="IsChangePassword" value="true" />
+
+                        <div class="bs-input-group">
+                            <label asp-for="ChangeEmail" class="bs-input-label">Email Address</label>
+                            <input asp-for="ChangeEmail" class="bs-form-control" placeholder="email@trustedge.com" />
+                            <span asp-validation-for="ChangeEmail" class="text-danger small"></span>
+                        </div>
+
+                        <div class="bs-input-group">
+                            <label asp-for="NewPassword" class="bs-input-label">New Password</label>
+                            <input asp-for="NewPassword" type="password" class="bs-form-control" />
+                            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="bs-input-group">
+                            <label asp-for="ConfirmNewPassword" class="bs-input-label">Repeat Password</label>
+                            <input asp-for="ConfirmNewPassword" type="password" class="bs-form-control" />
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+                        </div>
+
+                        <button type="submit" class="bs-btn-primary">Update Password</button>
+
+                        <div class="text-center mt-4">
+                            <a asp-action="Login" class="text-decoration-none text-muted small fw-bold">← BACK TO LOGIN</a>
+                        </div>
+                    </form>
+                }
+
+                <div class="bs-footer">
+                    &copy; @DateTime.Now.Year - TrustEdge Solution LLP
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
