@@ -1,0 +1,265 @@
+@model LoginVM
+@{
+    ViewData["Title"] = Model.IsChangePassword ? "Security Update" : "Secure Login";
+}
+
+<style>
+    /* BillSync Grand Horizon - Full Page Dual Partition */
+    .bs-full-page {
+        display: flex;
+        min-height: 90vh; /* Adjust based on your header/footer */
+        width: 100%;
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Left Partition: The Power Sidebar */
+    .bs-partition-left {
+        width: 45%;
+        background: #0f172a; /* Deep Enterprise Navy */
+        background-image: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+        padding: 80px;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+
+        /* Subtle background pattern for professional look */
+        .bs-partition-left::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+    .bs-grand-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -2px;
+        line-height: 1;
+        margin-bottom: 1rem;
+        z-index: 1;
+    }
+
+    .bs-grand-subtitle {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        max-width: 400px;
+        line-height: 1.6;
+        z-index: 1;
+    }
+
+    /* Right Partition: The Interactive Form */
+    .bs-partition-right {
+        width: 55%;
+        padding: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #ffffff;
+    }
+
+    .bs-form-wrapper {
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .bs-form-header h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 10px;
+    }
+
+    /* Professional Thick Inputs */
+    .bs-field-label {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #475569;
+        margin-bottom: 10px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .bs-main-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px 22px;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+
+        .bs-main-input:focus {
+            border-color: #0f172a;
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+    .bs-btn-action {
+        background: #0f172a;
+        color: #ffffff;
+        border: none;
+        padding: 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        width: 100%;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.2s;
+    }
+
+        .bs-btn-action:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+
+    .bs-footer-copyright {
+        margin-top: 60px;
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    .feature-pill {
+        display: inline-block;
+        background: rgba(56, 189, 248, 0.1);
+        color: #38bdf8;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    @@media (max-width: 1100px) {
+        .bs-partition-left {
+            display: none;
+        }
+
+        .bs-partition-right {
+            width: 100%;
+            padding: 40px;
+        }
+    }
+</style>
+
+<div class="container-fluid px-md-5 my-5">
+    <div class="bs-full-page">
+
+        @* ------------------------ LEFT PARTITION ------------------------ *@
+        <div class="bs-partition-left">
+            <div>
+                <span class="feature-pill">Enterprise ERP v2.6</span>
+                <h1 class="bs-grand-title">BillSync.</h1>
+                <p class="bs-grand-subtitle">
+                    The next generation of inventory control and automated accounting for modern businesses.
+                </p>
+
+                <div class="mt-5 pt-4 border-top border-secondary border-opacity-25">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-success rounded-circle me-3" style="width:10px; height:10px;"></div>
+                        <span class="small text-white-50">Secure SSL Encrypted</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info rounded-circle me-3" style="width:10px; height:10px;"></div>
+                        <span class="small text-white-50">Transaction Safe Operations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ------------------------ RIGHT PARTITION ------------------------ *@
+        <div class="bs-partition-right">
+            <div class="bs-form-wrapper">
+
+                <div class="bs-form-header mb-5">
+                    <h2>
+                        @(Model.IsChangePassword ? "Reset Access" : "Welcome Back")
+                    </h2>
+                    <p class="text-muted fs-5">Please enter your workspace credentials.</p>
+                </div>
+
+                @if (!Model.IsChangePassword)
+                {
+                    <form asp-action="Login" method="post">
+                        <div class="mb-4">
+                            <label asp-for="UserName" class="bs-field-label">User Identity</label>
+                            <input asp-for="UserName" class="bs-main-input" placeholder="e.g. administrator" />
+                            <span asp-validation-for="UserName" class="text-danger small mt-2 d-block"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between">
+                                <label asp-for="Password" class="bs-field-label">Security Password</label>
+                                <a asp-action="Login" asp-route-isChangePassword="true" class="text-decoration-none small fw-bold text-primary">Forgot Key?</a>
+                            </div>
+                            <input asp-for="Password" type="password" class="bs-main-input" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small mt-2 d-block"></span>
+                        </div>
+
+                        <div class="form-check mb-4 mt-2">
+                            <input asp-for="RememberMe" class="form-check-input" id="grandCheck">
+                            <label class="form-check-label text-muted fw-semibold" for="grandCheck">
+                                Remember this session
+                            </label>
+                        </div>
+
+                        <button type="submit" class="bs-btn-action">Enter Dashboard</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="ChangePassword" method="post">
+                        <input type="hidden" asp-for="IsChangePassword" value="true" />
+
+                        <div class="mb-4">
+                            <label asp-for="ChangeEmail" class="bs-field-label">Registered Email</label>
+                            <input asp-for="ChangeEmail" class="bs-main-input" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="NewPassword" class="bs-field-label">New Security Key</label>
+                            <input asp-for="NewPassword" type="password" class="bs-main-input" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ConfirmNewPassword" class="bs-field-label">Confirm New Key</label>
+                            <input asp-for="ConfirmNewPassword" type="password" class="bs-main-input" />
+                        </div>
+
+                        <button type="submit" class="bs-btn-action" style="background: #059669;">Update Identity</button>
+
+                        <div class="text-center mt-4">
+                            <a asp-action="Login" class="text-muted text-decoration-none small fw-bold">&larr; RETURN TO LOGIN</a>
+                        </div>
+                    </form>
+                }
+
+                <div class="bs-footer-copyright">
+                    &copy; @DateTime.Now.Year - TrustEdge Solution LLP. All rights reserved.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
