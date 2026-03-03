@@ -1,0 +1,183 @@
+@model LoginVM
+@{
+    ViewData["Title"] = Model.IsChangePassword ? "Change Password" : "Secure Login";
+}
+
+<style>
+    /* Scoped CSS specific to the BillSync Auth Card */
+    .billsync-auth-card {
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+    }
+
+    .billsync-brand-panel {
+        background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+        color: #ffffff;
+    }
+
+    .billsync-input {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+        .billsync-input:focus {
+            background-color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+    .billsync-btn {
+        background-color: #2563eb;
+        border: none;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+    }
+
+        .billsync-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+    .billsync-features {
+        list-style: none;
+        padding-left: 0;
+    }
+
+        .billsync-features li {
+            margin-bottom: 0.85rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+            .billsync-features li::before {
+                content: '✓';
+                color: #10b981;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+
+            <div class="card billsync-auth-card bg-white">
+                <div class="row g-0">
+
+                    @* ------------------------ LEFT: BRAND PANEL (Hidden on small screens) ------------------------ *@
+                    <div class="col-md-5 billsync-brand-panel p-5 d-none d-md-flex flex-column justify-content-between">
+                        <div>
+                            <h2 class="fw-bold mb-1">BillSync</h2>
+                            <p class="text-white-50 small mb-4">Smart Inventory & Accounting</p>
+
+                            <ul class="billsync-features mt-4">
+                                <li>GST-Ready Invoicing</li>
+                                <li>Real-time Stock Tracking</li>
+                                <li>Automated Ledger</li>
+                                <li>Transaction-Safe Operations</li>
+                            </ul>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="badge bg-primary bg-opacity-25 text-light border border-primary border-opacity-50 px-3 py-2">
+                                Secure Environment
+                            </span>
+                        </div>
+                    </div>
+
+                    @* ------------------------ RIGHT: FORM PANEL ------------------------ *@
+                    <div class="col-md-7 p-4 p-md-5">
+
+                        <div class="mb-4">
+                            <h4 class="fw-bold text-dark">
+                                @(Model.IsChangePassword ? "Secure Password Update" : "Access Dashboard")
+                            </h4>
+                            <p class="text-muted small">
+                                @(Model.IsChangePassword ? "Enter your new credentials below." : "Enter your credentials to continue.")
+                            </p>
+                        </div>
+
+                        @if (!Model.IsChangePassword)
+                        {
+                            @* --- LOGIN FORM --- *@
+                            <form asp-action="Login" method="post">
+                                <div class="mb-3">
+                                    <label asp-for="UserName" class="form-label fw-semibold text-dark small">Username</label>
+                                    <input asp-for="UserName" class="form-control billsync-input" autocomplete="username" />
+                                    <span asp-validation-for="UserName" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label asp-for="Password" class="form-label fw-semibold text-dark small mb-0">Password</label>
+                                        <a asp-action="Login" asp-route-isChangePassword="true" class="text-decoration-none small fw-semibold" style="color: #2563eb;">Change Password?</a>
+                                    </div>
+                                    <input asp-for="Password" class="form-control billsync-input mt-1" type="password" autocomplete="current-password" />
+                                    <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <div class="form-check mb-4">
+                                    <input asp-for="RememberMe" class="form-check-input" id="rememberMe" />
+                                    <label class="form-check-label text-muted small" for="rememberMe">Keep me logged in</label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary billsync-btn w-100 text-white">Secure Login</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @* --- CHANGE PASSWORD FORM --- *@
+                            <form asp-action="ChangePassword" method="post">
+                                <input type="hidden" asp-for="IsChangePassword" value="true" />
+
+                                <div class="mb-3">
+                                    <label asp-for="ChangeEmail" class="form-label fw-semibold text-dark small">Registered Email</label>
+                                    <input asp-for="ChangeEmail" class="form-control billsync-input" />
+                                    <span asp-validation-for="ChangeEmail" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="NewPassword" class="form-label fw-semibold text-dark small">New Password</label>
+                                    <input asp-for="NewPassword" type="password" class="form-control billsync-input" />
+                                    <span asp-validation-for="NewPassword" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="ConfirmNewPassword" class="form-label fw-semibold text-dark small">Confirm Password</label>
+                                    <input asp-for="ConfirmNewPassword" type="password" class="form-control billsync-input" />
+                                    <span asp-validation-for="ConfirmNewPassword" class="text-danger small mt-1 d-block"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-success billsync-btn w-100 text-white mb-3">Update Credentials</button>
+
+                                <div class="text-center">
+                                    <a asp-action="Login" class="text-decoration-none text-muted fw-semibold small">
+                                        &larr; Return to Login
+                                    </a>
+                                </div>
+                            </form>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+            @* ------------------------ FOOTER ------------------------ *@
+            <div class="text-center mt-4 text-muted" style="font-size: 0.85rem;">
+                &copy; @DateTime.Now.Year - TrustEdge Solution LLP. All rights reserved.
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
